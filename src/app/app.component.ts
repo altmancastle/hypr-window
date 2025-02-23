@@ -1,9 +1,10 @@
 import { Component, ViewChild, ViewContainerRef } from '@angular/core';
 import { WindowComponent } from './window/window.component';
+import { CommonModule } from "@angular/common"
 
 @Component({
   selector: 'app-root',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -14,16 +15,15 @@ export class AppComponent {
   constructor() { }
 
   loadCard(component: any) {
-    if(this.windowContainer?.length > 0) {
-      this.windowContainer.clear();
-      this.windowContainer.createComponent(component);
-    }
+    this.windowContainer?.clear();
+    this.windowContainer?.createComponent(component);
+  }
+
+  ngAfterViewInit() {
+    this.loadCard(WindowComponent);
   }
 
   ngOnInit() {
-    this.loadCard(WindowComponent);
-    this.loadCard(WindowComponent);
-    this.loadCard(WindowComponent);
   }
 
   title = 'hypr-window';

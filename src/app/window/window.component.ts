@@ -1,11 +1,11 @@
 import { Component, ViewChild, ViewContainerRef } from '@angular/core';
 import { ViewComponent } from '../view/view.component';
-
+import { CommonModule } from "@angular/common"
 
 
 @Component({
   selector: 'app-window',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './window.component.html',
   styleUrl: './window.component.css'
 })
@@ -16,14 +16,10 @@ export class WindowComponent {
   constructor() { }
 
   loadCard(component: any) {
-    if(this.viewContainer?.length > 0) {
-      this.viewContainer.clear();
-      this.viewContainer.createComponent(component);
-    }
+    this.viewContainer?.createComponent(component);
   }
 
-  ngOnInit() {
-    this.loadCard(ViewComponent);
+  ngAfterViewInit() {
     this.loadCard(ViewComponent);
   }
 
