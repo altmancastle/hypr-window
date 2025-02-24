@@ -5,14 +5,8 @@
   let { appWindow }: { appWindow: AppWindow } = $props();
 </script>
 
-<div class="window">
-  <div>
-    windows {appWindow.id}
-  </div>
-
+<div class="window w-full h-full grid grid-flow-col grid-rows-3 gap-4">
   {#each appWindow.children as item, i}
-    <div>
-      <View view={item}></View>
-    </div>
+    <View view={item}></View>
   {/each}
 </div>

@@ -26,7 +26,6 @@
   };
 
   $effect(() => {
-
     console.log($appWindows);
 
     if (activeWindowId) {
@@ -51,7 +50,7 @@
   <div bind:this={windowClientRef} class="w-full h-full overflow-hidden">
     <div bind:this={windowRef} class="flex flex-row h-full">
       {#each $appWindows as item, i}
-        <div transition:fly class="window rounded-md p-4 w-full h-full">
+        <div transition:fly class="window rounded-md w-full h-full">
           <item.element appWindow={item}></item.element>
         </div>
       {/each}
