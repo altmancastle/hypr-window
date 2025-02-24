@@ -1,6 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { activeWindow, appWindows, type AppWindow } from "../store/app.store";
+  import {
+    activeView,
+    activeWindow,
+    appWindows,
+    type AppWindow,
+  } from "../store/app.store";
   import View from "./View.svelte";
   import Dashboard from "../pages/Dashboard.svelte";
   import Message from "../pages/Message.svelte";
@@ -49,11 +54,10 @@
       return newActive;
     });
   };
-
 </script>
 
 <div
-  class="status-bar flex items-center px-2 py-2 bg-gray-200 opacity-50 shadow shadow-black text-white rounded-md overflow-hidden"
+  class="status-bar flex items-center px-2 py-2 bg-gray-200 text-black shadow shadow-blue-200 rounded-md overflow-hidden"
 >
   <div class="flex-1 flex items-center">
     <button
@@ -82,7 +86,7 @@
       {#each windowRefs as item, i}
         <li
           class={[
-            "bg-gray-400 rounded-sm w-8 h-8 flex items-center justify-center cursor-pointer", 
+            "bg-gray-400 rounded-sm w-8 h-8 flex items-center justify-center cursor-pointer",
             $activeWindow.id === item.id && " bg-gray-500",
           ]}
         >
@@ -91,14 +95,12 @@
       {/each}
     </ul>
   </div>
-  <div class="flex-1">active view</div>
-  <div class="flex-1">
+  <div class="flex-1 text-center">{$activeView?.viewId}</div>
+  <div class="flex-1 text-right">
     <button onclick={() => handleOpenApp("Dashboard")}>dashboard</button>
     <button onclick={() => handleOpenApp("Message")}>message</button>
   </div>
 </div>
 
-
 <style>
-
 </style>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    :root {
+      --gap: 5px;
+      --master-width: 60%;
+    }
+
+    .container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      gap: var(--gap);
+      padding: var(--gap);
+      background: #2e3440;
+    }
+
+    /* 主区域 */
+    .master-area {
+      flex: 0 0 var(--master-width);
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap);
+    }
+
+    /* 堆叠区域 */
+    .stack-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap);
+    }
+
+    .window {
+      background: #3b4252;
+      border-radius: 5px;
+      padding: 15px;
+      color: white;
+      overflow: hidden;
+      transition: 0.2s;
+    }
+
+    /* 浮动窗口 */
+    .window.float {
+      position: absolute;
+      width: 300px;
+      height: 200px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .resize-handle {
+      width: 5px;
+      background: #4c566a;
+      cursor: col-resize;
+    }
+
+    .add-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px;
+      background: #434c5e;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="master-area">
+      <div class="window">Master Window 1</div>
+      <div class="window">Master Window 2</div>
+    </div>
+
+    <div class="resize-handle"></div>
+
+    <div class="stack-area">
+      <div class="window">Stack Window 1</div>
+      <div class="window">Stack Window 2</div>
+      <div class="window">Stack Window 3</div>
+    </div>
+  </div>
+
+  <button class="add-btn" onclick="addWindow()">+ Add Window</button>
+
+  <script>
+    // 动态调整主区域宽度
+    let isResizing = false;
+    const resizeHandle = document.querySelector('.resize-handle');
+    const container = document.querySelector('.container');
+
+    resizeHandle.addEventListener('mousedown', () => {
+      isResizing = true;
+      document.body.style.cursor = 'col-resize';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing) return;
+
+      const containerRect = container.getBoundingClientRect();
+      const newWidth = (e.clientX - containerRect.left) / containerRect.width * 100;
+
+      document.documentElement.style.setProperty(
+        '--master-width',
+        `${Math.min(Math.max(20, newWidth), 80)}%`
+      );
+    });
+
+    document.addEventListener('mouseup', () => {
+      isResizing = false;
+      document.body.style.cursor = 'default';
+    });
+
+    // 动态添加窗口
+    function addWindow() {
+      const newWindow = document.createElement('div');
+      newWindow.className = 'window';
+      newWindow.textContent = `New Window ${document.querySelectorAll('.window').length + 1}`;
+
+      // 双击切换浮动状态
+      newWindow.ondblclick = () => {
+        newWindow.classList.toggle('float');
+        if (newWindow.classList.contains('float'))
+        {
+          newWindow.style.left = `${Math.random() * 500}px`;
+          newWindow.style.top = `${Math.random() * 300}px`;
+        }
+      };
+
+      document.querySelector('.stack-area').appendChild(newWindow);
+    }
+
+    // 窗口拖拽功能
+    document.querySelectorAll('.window').forEach(window => {
+      let isDragging = false;
+      let startX, startY, initialLeft, initialTop;
+
+      window.addEventListener('mousedown', (e) => {
+        if (!window.classList.contains('float')) return;
+
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        initialLeft = parseFloat(window.style.left) || 0;
+        initialTop = parseFloat(window.style.top) || 0;
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+
+        window.style.left = `${initialLeft + dx}px`;
+        window.style.top = `${initialTop + dy}px`;
+      });
+
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+      });
+    });
+  </script>
+</body>
+
+</html>
