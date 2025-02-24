@@ -1,7 +1,7 @@
 <script lang="ts">
   import StatusBar from "./lib/StatusBar.svelte";
   import HyprWindow from "./lib/HyprWindow.svelte";
-  import { activeWindowId, appWindows } from "./store/app.store";
+  import { activeWindowId, appWindows, updateActiveWindow } from "./store/app.store";
   import { fly } from "svelte/transition";
   import { onMount } from "svelte";
 
@@ -16,7 +16,7 @@
         element: HyprWindow,
         children: [],
       });
-      activeWindowId.set(id);
+      updateActiveWindow(id);
       return value;
     });
   };

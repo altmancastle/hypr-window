@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { appWindows, type AppWindow } from "../store/app.store";
+  import { activeWindow, appWindows, type AppWindow } from "../store/app.store";
+  import View from "./View.svelte";
 
   const { onNewWindow }: { onNewWindow: () => void } = $props();
 
@@ -14,6 +15,31 @@
 
   const handleNewWindow = () => {
     onNewWindow();
+  };
+
+  const handleOpenApp = (app: string) => {
+    activeWindow.update((value) => {
+      value = {
+        ...value,
+        children: [
+          ...value.children,
+          {
+            viewId: String(value.children.length + 1),
+            layout: View,
+            element: import(`../pages/${app}.svelte`),
+          },
+        ],
+      };
+      return value;
+    });
+
+    activeWindow.subscribe((active) => {
+      appWindows.update((value) => {
+        value.splice(Number(active.id) - 1, 1, active); 
+        return value;
+      });
+    });
+
   };
 </script>
 
@@ -32,5 +58,8 @@
     </ul>
   </div>
   <div class="flex-1">active view</div>
-  <div class="flex-1">operate</div>
+  <div class="flex-1">
+    <button onclick={() => handleOpenApp("Dashboard")}>dashboard</button>
+    <button onclick={() => handleOpenApp("Message")}>message</button>
+  </div>
 </div>
