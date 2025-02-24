@@ -18,6 +18,7 @@ export const appWindows = writable<AppWindow[]>([]);
 
 export const activeWindowId = writable<string>("");
 export const activeWindow = writable<AppWindow>();
+export const activeView = writable<ViewApp>();
 
 export const updateActiveWindow = (id: string) => {
   activeWindowId.set(id);

@@ -12,7 +12,7 @@
 
   {#each appWindow.children as item, i}
     <div>
-      <View children={item.element}></View>
+      <View view={item}></View>
     </div>
   {/each}
 </div>
