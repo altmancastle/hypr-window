@@ -2,8 +2,15 @@
   import { onMount } from "svelte";
   import { activeWindow, appWindows, type AppWindow } from "../store/app.store";
   import View from "./View.svelte";
+  import Dashboard from "../pages/Dashboard.svelte";
+  import Message from "../pages/Message.svelte";
 
   const { onNewWindow }: { onNewWindow: () => void } = $props();
+
+  const Apps = {
+    Dashboard,
+    Message,
+  }
 
   let windowRefs = $state<AppWindow[]>([]);
 
@@ -17,29 +24,28 @@
     onNewWindow();
   };
 
-  const handleOpenApp = (app: string) => {
-    activeWindow.update((value) => {
-      value = {
-        ...value,
+  const handleOpenApp = (app: keyof typeof Apps) => {
+    activeWindow.update((active) => {
+      const value = {
+        ...active,
         children: [
-          ...value.children,
+          ...active.children,
           {
-            viewId: String(value.children.length + 1),
+            viewId: String(active.children.length + 1),
             layout: View,
-            element: import(`../pages/${app}.svelte`),
+            element: Apps[app],
           },
         ],
       };
+
+
+      appWindows.update((win) => {
+        win.splice(Number(value.id) - 1, 1, active);
+        return win.slice(0);
+      });
+
       return value;
     });
-
-    activeWindow.subscribe((active) => {
-      appWindows.update((value) => {
-        value.splice(Number(active.id) - 1, 1, active); 
-        return value;
-      });
-    });
-
   };
 </script>
 
