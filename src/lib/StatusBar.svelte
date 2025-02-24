@@ -10,7 +10,7 @@
   const Apps = {
     Dashboard,
     Message,
-  }
+  };
 
   let windowRefs = $state<AppWindow[]>([]);
 
@@ -26,7 +26,7 @@
 
   const handleOpenApp = (app: keyof typeof Apps) => {
     activeWindow.update((active) => {
-      const value = {
+      const newActive = {
         ...active,
         children: [
           ...active.children,
@@ -38,13 +38,15 @@
         ],
       };
 
-
       appWindows.update((win) => {
-        win.splice(Number(value.id) - 1, 1, active);
-        return win.slice(0);
+        const index = win.findIndex((w) => w.id === newActive.id);
+        if (index !== -1) {
+          win[index] = newActive;
+        }
+        return win;
       });
 
-      return value;
+      return newActive;
     });
   };
 </script>

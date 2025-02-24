@@ -26,8 +26,10 @@
   };
 
   $effect(() => {
+
     console.log($appWindows);
-    if (windowClientRef && $appWindows.length > 0 && activeWindowId) {
+
+    if (activeWindowId) {
       windowRef.style.width =
         $appWindows.length * (windowClientRef?.clientWidth || 0) + "px";
       activeWindowId.subscribe((value) => {
@@ -36,6 +38,10 @@
     } else {
       windowRef.style.width = "100%";
     }
+  });
+
+  onMount(() => {
+    console.log($appWindows);
   });
 </script>
 
