@@ -4,6 +4,7 @@
     activeView,
     activeWindow,
     appWindows,
+    updateActiveWindow,
     type AppWindow,
   } from "../store/app.store";
   import View from "./View.svelte";
@@ -54,6 +55,11 @@
       return newActive;
     });
   };
+
+
+  const handleToggleWindow = (item: AppWindow) => {
+    updateActiveWindow(item.id);
+  }
 </script>
 
 <div
@@ -84,13 +90,14 @@
     </button>
     <ul class="flex list-none space-x-0.5">
       {#each windowRefs as item, i}
-        <li
-          class={[
-            "bg-gray-400 rounded-sm w-8 h-8 flex items-center justify-center cursor-pointer",
-            $activeWindow.id === item.id && " bg-gray-500",
-          ]}
-        >
-          {i + 1}
+        <li>
+        <button
+        onclick={()=>handleToggleWindow(item)}
+        class={[
+          "bg-gray-400 rounded-sm w-8 h-8 flex items-center justify-center cursor-pointer",
+          $activeWindow.id === item.id && " bg-gray-500",
+        ]}>{i + 1}</button>
+          
         </li>
       {/each}
     </ul>
