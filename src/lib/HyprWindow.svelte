@@ -57,12 +57,12 @@
 
 <div bind:this={containerRef} class="window flex w-full h-full">
   <div class="master-area">
-    <View view={masterView()}></View>
+    <View master view={masterView()}></View>
   </div>
   <div bind:this={resizeRef} class="resize-handle"></div>
-  <div class="stack-area flex-1 flex flex-column">
+  <div class="stack-area flex-1 relative">
     {#each stackView() as item, i}
-      <View view={item}></View>
+      <View view={item} index={i}></View>
     {/each}
   </div>
 </div>
@@ -94,8 +94,9 @@
 
   .resize-handle {
     display: none;
-    width: 5px;
+    width: 3px;
     background: #4c566a;
+    border-radius: 10px;
     cursor: col-resize;
   }
 </style>

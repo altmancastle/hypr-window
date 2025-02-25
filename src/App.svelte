@@ -13,6 +13,10 @@
   let windowRef: HTMLDivElement;
 
   const handleNewWindow = () => {
+    if($appWindows.length == 9) {
+      return;
+    }
+
     appWindows.update((value) => {
       let id = String(value.length + 1);
       value.push({

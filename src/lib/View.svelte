@@ -1,7 +1,7 @@
 <script lang="ts">
   import { activeView, type ViewApp } from "../store/app.store";
 
-  const { view }: { view?: ViewApp } = $props();
+  const { view, master, index }: { view?: ViewApp, master?: boolean, index?: number } = $props();
 
   const handleMouseenter = () => {
     if ($activeView?.viewId !== view?.viewId && view) {

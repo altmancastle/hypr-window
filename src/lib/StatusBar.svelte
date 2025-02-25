@@ -35,6 +35,10 @@
       handleNewWindow();
     }
 
+    if ($activeWindow?.children.length == 4) {
+      return;
+    }
+
     activeWindow.update((active) => {
       const newActive = {
         ...active,
@@ -99,7 +103,8 @@
             class={[
               "bg-gray-300 rounded-sm w-8 h-8 flex items-center justify-center cursor-pointer",
               $activeWindow.id === item.id && "text-white bg-blue-400!",
-            ]}>{i + 1}</button>
+            ]}>{i + 1}</button
+          >
         </li>
       {/each}
     </ul>
