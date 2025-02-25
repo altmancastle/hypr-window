@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { mount, onMount } from "svelte";
   import {
     activeView,
     activeWindow,
@@ -10,6 +10,9 @@
   import View from "./View.svelte";
   import Dashboard from "../pages/Dashboard.svelte";
   import Message from "../pages/Message.svelte";
+  import Menu from "./Menu.svelte";
+
+  let bodyRef: HTMLBodyElement;
 
   const { onNewWindow }: { onNewWindow: () => void } = $props();
 
@@ -31,6 +34,9 @@
   };
 
   const handleOpenApp = (app: keyof typeof Apps) => {
+
+    const menu = mount(Menu, { target: document.body });
+
     if (!$activeWindow) {
       handleNewWindow();
     }
@@ -111,10 +117,9 @@
   </div>
   <div class="flex-1 text-center">{$activeView?.viewId}</div>
   <div class="flex-1 text-right">
-    <button onclick={() => handleOpenApp("Dashboard")}>dashboard</button>
+    <button onclick={() => handleOpenApp("Dashboard")}>menu</button>
     <button onclick={() => handleOpenApp("Message")}>message</button>
   </div>
 </div>
 
-<style>
-</style>
+<svelte:body bind:this={bodyRef} />
