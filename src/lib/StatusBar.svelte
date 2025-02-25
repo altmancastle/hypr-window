@@ -31,6 +31,10 @@
   };
 
   const handleOpenApp = (app: keyof typeof Apps) => {
+    if (!$activeWindow) {
+      handleNewWindow();
+    }
+
     activeWindow.update((active) => {
       const newActive = {
         ...active,
@@ -56,10 +60,9 @@
     });
   };
 
-
   const handleToggleWindow = (item: AppWindow) => {
     updateActiveWindow(item.id);
-  }
+  };
 </script>
 
 <div
@@ -69,7 +72,7 @@
     <button
       aria-labelledby="new-window"
       title="New Window"
-      class="mr-0.5 rounded-md bg-gray-700 p-2 cursor-pointer"
+      class="mr-0.5 rounded-md bg-gray-300 p-2 cursor-pointer"
       onclick={handleNewWindow}
     >
       <svg
@@ -91,13 +94,12 @@
     <ul class="flex list-none space-x-0.5">
       {#each windowRefs as item, i}
         <li>
-        <button
-        onclick={()=>handleToggleWindow(item)}
-        class={[
-          "bg-gray-400 rounded-sm w-8 h-8 flex items-center justify-center cursor-pointer",
-          $activeWindow.id === item.id && " bg-gray-500",
-        ]}>{i + 1}</button>
-          
+          <button
+            onclick={() => handleToggleWindow(item)}
+            class={[
+              "bg-gray-300 rounded-sm w-8 h-8 flex items-center justify-center cursor-pointer",
+              $activeWindow.id === item.id && "text-white bg-blue-400!",
+            ]}>{i + 1}</button>
         </li>
       {/each}
     </ul>

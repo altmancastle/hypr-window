@@ -7,60 +7,57 @@
   let containerRef: HTMLDivElement;
   let isResizing = $state(false);
 
-  let masterView = $derived(()=>{
-    if(appWindow.children.length > 0) {
-      return appWindow.children[0]
+  let masterView = $derived(() => {
+    if (appWindow.children.length > 0) {
+      if (appWindow.children.length == 1) {
+        document.documentElement.style.setProperty("--master-width", `100%`);
+      } else {
+        document.documentElement.style.setProperty("--master-width", `60%`);
+      }
+      return appWindow.children[0];
     }
-  })
+  });
 
-  let stackView = $derived(()=>{
-    if(appWindow.children.length > 1) {
-      return appWindow.children.slice(1)
+  let stackView = $derived(() => {
+    if (appWindow.children.length > 1) {
+      resizeRef.style.display = "block";
+      return appWindow.children.slice(1);
     }
-    return []
-  })
+    return [];
+  });
 
-  $effect(()=>{
+  $effect(() => {
+    isResizing = false;
 
-    isResizing = false
-
-    const container = document.querySelector('.container');
-
-    resizeRef.addEventListener('mousedown', () => {
+    resizeRef.addEventListener("mousedown", () => {
       isResizing = true;
-      document.body.style.cursor = 'col-resize';
+      document.body.style.cursor = "col-resize";
     });
 
-    document.addEventListener('mousemove', (e) => {
+    document.addEventListener("mousemove", (e) => {
       if (!isResizing) return;
 
       const containerRect = containerRef.getBoundingClientRect();
-      console.log(e.clientX, containerRect.left)
 
-
-      const newWidth = (e.clientX - containerRect.left) / containerRect.width * 100;
+      const newWidth =
+        ((e.clientX - containerRect.left) / containerRect.width) * 100;
 
       document.documentElement.style.setProperty(
-        '--master-width',
+        "--master-width",
         `${Math.min(Math.max(20, newWidth), 80)}%`
       );
     });
 
-    document.addEventListener('mouseup', () => {
+    document.addEventListener("mouseup", () => {
       isResizing = false;
-      document.body.style.cursor = 'default';
+      document.body.style.cursor = "default";
     });
-  })
-
-
+  });
 </script>
 
-<div
-  bind:this={containerRef}
-  class="window flex w-full h-full"
->
+<div bind:this={containerRef} class="window flex w-full h-full">
   <div class="master-area">
-      <View view={masterView()}></View>
+    <View view={masterView()}></View>
   </div>
   <div bind:this={resizeRef} class="resize-handle"></div>
   <div class="stack-area flex-1 flex flex-column">
@@ -71,35 +68,34 @@
 </div>
 
 <style>
+  :root {
+    --gap: 5px;
+    --master-width: 60%;
+  }
 
-:root {
-  --gap: 5px;
-  --master-width: 60%;
-}
+  .window {
+    gap: var(--gap);
+    padding: var(--gap);
+    width: 100%;
+  }
+  .master-area {
+    width: var(--master-width);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+  }
 
-.window {
-  gap: var(--gap);
-  padding: var(--gap);
-}
-.master-area {
-  flex: 1 1 var(--master-width);
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap);
-}
+  .stack-area {
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+  }
 
-.stack-area {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap);
-}
-
-.resize-handle {
-  width: 5px;
-  background: #4c566a;
-  cursor: col-resize;
-}
-
-
+  .resize-handle {
+    display: none;
+    width: 5px;
+    background: #4c566a;
+    cursor: col-resize;
+  }
 </style>

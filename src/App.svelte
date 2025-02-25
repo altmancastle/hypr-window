@@ -26,8 +26,6 @@
   };
 
   $effect(() => {
-    console.log($appWindows);
-
     if (activeWindowId) {
       windowRef.style.width =
         $appWindows.length * (windowClientRef?.clientWidth || 0) + "px";
