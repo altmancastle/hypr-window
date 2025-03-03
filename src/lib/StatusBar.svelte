@@ -29,9 +29,7 @@
   const onOpenApp = (app: any) => {
     handleOpenApp(app.name);
     if (menuRef) {
-      unmount(menuRef).then(() => {
-        menuRef = null;
-      });
+      menuRef = null;
     }
   };
 

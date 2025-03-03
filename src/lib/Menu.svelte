@@ -53,6 +53,7 @@
 
   const handleApp = (app: any) => {
     onOpenApp(app);
+    portalElementRef.remove();
   };
 
   const handleSearch = (e: Event) => {
