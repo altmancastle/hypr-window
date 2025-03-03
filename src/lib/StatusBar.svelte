@@ -26,8 +26,8 @@
     onNewWindow();
   };
 
-  const onOpenApp = (app: any) => {
-    handleOpenApp(app.name);
+  const onOpenApp = (app: App) => {
+    handleOpenApp(app);
     if (menuRef) {
       menuRef = null;
     }

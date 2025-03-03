@@ -44,14 +44,14 @@
 
     searchRef.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
-        handleApp(apps[0]);
+        handleApp(apps[currentActive]);
       }
     });
   });
 
   let apps = $state(APPS);
 
-  const handleApp = (app: any) => {
+  const handleApp = (app: App) => {
     onOpenApp(app);
     portalElementRef.remove();
   };
@@ -88,7 +88,6 @@
             onkeydown={(e) => {
               if (e.key === "Enter") {
                 handleApp(app);
-                // portalElementRef.remove();
               }
             }}
             onclick={() => handleApp(app)}

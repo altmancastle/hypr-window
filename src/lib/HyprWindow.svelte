@@ -19,6 +19,8 @@
   });
 
   let stackView = $derived(() => {
+    console.log(appWindow.children.length);
+
     if (appWindow.children.length > 1) {
       resizeRef.style.display = "block";
       return appWindow.children.slice(1);
