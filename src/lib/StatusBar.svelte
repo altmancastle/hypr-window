@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { mount, onMount } from "svelte";
+  import { mount, onMount, unmount } from "svelte";
   import {
     activeView,
     activeWindow,
@@ -8,18 +8,11 @@
     type AppWindow,
   } from "../store/app.store";
   import View from "./View.svelte";
-  import Dashboard from "../pages/Dashboard.svelte";
-  import Message from "../pages/Message.svelte";
-  import Menu from "./Menu.svelte";
-
-  let bodyRef: HTMLBodyElement;
+  import Menu, { type App } from "./Menu.svelte";
 
   const { onNewWindow }: { onNewWindow: () => void } = $props();
 
-  const Apps = {
-    Dashboard,
-    Message,
-  };
+  let menuRef = $state<any>();
 
   let windowRefs = $state<AppWindow[]>([]);
 
@@ -33,10 +26,29 @@
     onNewWindow();
   };
 
-  const handleOpenApp = (app: keyof typeof Apps) => {
+  const onOpenApp = (app: any) => {
+    handleOpenApp(app.name);
+    if (menuRef) {
+      unmount(menuRef).then(() => {
+        menuRef = null;
+      });
+    }
+  };
 
-    const menu = mount(Menu, { target: document.body });
+  const openMenu = () => {
+    if (menuRef) {
+      unmount(menuRef).then(() => {
+        menuRef = null;
+      });
+    } else {
+      menuRef = mount(Menu, {
+        target: document.body,
+        props: { onOpenApp: onOpenApp },
+      });
+    }
+  };
 
+  const handleOpenApp = (app: App) => {
     if (!$activeWindow) {
       handleNewWindow();
     }
@@ -44,7 +56,6 @@
     if ($activeWindow?.children.length == 4) {
       return;
     }
-
     activeWindow.update((active) => {
       const newActive = {
         ...active,
@@ -53,7 +64,7 @@
           {
             viewId: String(active.children.length + 1),
             layout: View,
-            element: Apps[app],
+            element: app.component,
           },
         ],
       };
@@ -117,9 +128,6 @@
   </div>
   <div class="flex-1 text-center">{$activeView?.viewId}</div>
   <div class="flex-1 text-right">
-    <button onclick={() => handleOpenApp("Dashboard")}>menu</button>
-    <button onclick={() => handleOpenApp("Message")}>message</button>
+    <button onclick={() => openMenu()}>menu</button>
   </div>
 </div>
-
-<svelte:body bind:this={bodyRef} />
